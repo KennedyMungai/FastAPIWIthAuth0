@@ -1,9 +1,11 @@
 """FastAPI starter sample
 """
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends, Response, status
+from fastapi.security import HTTPBearer
 
 app = FastAPI()
+token_auth_scheme = HTTPBearer()
 
 
 @app.get("/api/public")
@@ -19,7 +21,7 @@ def public():
 
 
 @app.get("/api/private")
-def private():
+def private(_token: str = Depends(token_auth_scheme)):
     """A valid access token is required to access this route"""
 
     # We need to protect this endpoint!
